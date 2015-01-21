@@ -6,7 +6,7 @@ A simple monitor and helpers to automate collection and reporting of errors in N
 Installation
 ------------
 	
-	npm install nhs
+	npm install node-health-service
 	
 Usage
 =====

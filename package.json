@@ -1,0 +1,24 @@
+{
+  "name": "nhs",
+  "version": "1.0.0",
+  "description": "Node Health Service - monitor and report of the health of a node application",
+  "main": "nhs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "health",
+    "healthcheck",
+    "monitor"
+  ],
+  "author": "matatbread",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:MailOnline/nhs.git"
+  },
+  "dependencies": {
+    "async": "^0.9.0"
+  }
+}

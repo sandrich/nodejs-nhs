@@ -18,7 +18,7 @@ Reporters
 ---------
 In your micro-services you instatiate a Reporter via:
 
-	var reporter = require('nhs').Reporter() ;
+	var reporter = require('node-health-service').Reporter() ;
 	...
 	// Middleware to capture any HTTP responses with a status code>=400
 	app.use(reporter.monitor) ; 
@@ -35,7 +35,7 @@ That's it. You micro-service will now capture the last HTTP error generated and 
 
 There's a handy shortcut for the above too, if you have an Express or Connect app to monitor:
 
-	var nhs = require('nhs') ;
+	var nhs = require('node-health-service') ;
 	...
 	nhs.reportOn(app) ;
 
@@ -43,7 +43,7 @@ Other errors
 ------------
 What if you want to report on other, non-HTTP errors? You could generalise your solution using a custom Probe (see below), or arbitrarily set an error in general:
 
-	var reporter = require('nhs').Reporter() ;
+	var reporter = require('node-health-service').Reporter() ;
 	...
 	reporter.setLastError(some-object-describing-a-problem) ;
 	
@@ -60,7 +60,7 @@ Services
 
 To aggregate and monitor your micro-services, or other external services like databases or cloud services, instantiate a Service:
 
-	var service = require('nhs').Service ;
+	var service = require('node-health-service').Service ;
 	...
 	app.get('/healthcheck',service.route(config)) ;
 	
@@ -94,7 +94,7 @@ All the results are gathered up an reported as one big JSON document, with a top
 
 Like with Reporter, there's a handy shortcut if you need a quick app to monitor lots of things, which doesn't need Express, Connect or anything else. The minimal server is:
 
-	var nhs = require('nhs') ;
+	var nhs = require('node-health-service') ;
 	var config = require('./config.json') ;
 	nhs.listen(config.port,config.healthcheck) ;
 	console.log("NHS Healthcheck on port",config.port) ;
@@ -106,7 +106,7 @@ The NHS Service can be given additional probes, as well as the built-in "ping" i
 
 You create additional types of probe by creating a function:
 
-	var nhs = require('nhs') ;
+	var nhs = require('node-health-service') ;
 
 	nhs.Service.probe.<nameOfProbe> = function(cfg) {
 		return function(done) {
@@ -122,7 +122,7 @@ You create additional types of probe by creating a function:
 
 For example, to check for the presence of a file on the File system:
 
-	var nhs = require('nhs') ;
+	var nhs = require('node-health-service') ;
 
 	nhs.Service.probe.fileExists = function(cfg) {
 		return function(done) {
@@ -147,3 +147,7 @@ Once this is done, we could add the following test to the config:
 		}
 
 Obviously, this is a basic example. More useful tests might be for a maximum file size, minimum disk space, etc., but NHS is not designed to test everything (there are plenty of great Ops-focussed tools for that), rather it's a way to quickly check for 'live' errors in Node-based app servers.
+
+Disclaimer
+----------
+The Node Health Service ('nhs') is not affiliated in any way with similarly named software or organisations.

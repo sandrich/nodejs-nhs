@@ -44,6 +44,6 @@ module.exports = function Reporter(config){
 					timestamp:Date.now(), 
 					error:info
 			} ;
-		};
+		}
 	}
 }

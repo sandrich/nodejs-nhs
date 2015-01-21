@@ -14,12 +14,12 @@ module.exports = function Reporter(config){
 			var writer = res.write ;
 			var responseBody = [] ;
 			res.write = function(chunk) {
-				if (res.statusCode>=errorThreshold)
+				if (res.statusCode>=config.errorThreshold)
 					responseBody.push(chunk) ;
 				writer.apply(this,arguments) ;
 			}
 			res.on('finish',function(){
-				if (res.statusCode>=errorThreshold)
+				if (res.statusCode>=config.errorThreshold)
 					last = {
 						url:req.originalUrl,
 						status:res.statusCode,

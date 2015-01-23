@@ -14,23 +14,24 @@ module.exports = function Reporter(config){
 			var writer = res.write ;
 			var responseBody = [] ;
 			res.write = function(chunk) {
-				if (res.statusCode>=config.errorThreshold)
+				if (!res.statusCode || res.statusCode>=config.errorThreshold)
 					responseBody.push(chunk) ;
 				writer.apply(this,arguments) ;
 			}
 			res.on('finish',function(){
-				if (res.statusCode>=config.errorThreshold)
+				if (!req.doNotMonitor && res.statusCode>=config.errorThreshold)
 					last = {
 						url:req.originalUrl,
 						status:res.statusCode,
 						timestamp:Date.now(), 
-						response:responseBody.map(function(x){ 
+						response:responseBody && responseBody.map(function(x){ 
 							return x.toString()}).join("")} ;
 			}) ;
 			next && next() ;
 		},
 
 		lastError:function(req,res,next){
+			req.doNotMonitor = true ;
 			if (last) last.age = Date.now()-last.timestamp ;
 			if (last && last.age<config.errorTTL) 
 				res.status(400).json({status:"ERROR",lastError:last}) ;

@@ -1,6 +1,6 @@
 {
   "name": "node-health-service",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Node Health Service - monitor and report of the health of a node application",
   "main": "nhs.js",
   "scripts": {

@@ -9,7 +9,7 @@ module.exports = function Reporter(config){
 	config.errorTTL = config.errorTTL || 600000 ;
 	config.errorThreshold = 400 ;
 
-	return {
+	var reporter = {
 		monitor:function(req,res,next){
 			var writer = res.write ;
 			var responseBody = [] ;
@@ -20,12 +20,11 @@ module.exports = function Reporter(config){
 			}
 			res.on('finish',function(){
 				if (!req.doNotMonitor && res.statusCode>=config.errorThreshold)
-					last = {
+					reporter.setLastError({
 						url:req.originalUrl,
 						status:res.statusCode,
-						timestamp:Date.now(), 
 						response:responseBody && responseBody.map(function(x){ 
-							return x.toString()}).join("")} ;
+							return x.toString()}).join("")}) ;
 			}) ;
 			next && next() ;
 		},
@@ -40,11 +39,13 @@ module.exports = function Reporter(config){
 		},
 
 		setLastError:function(info){
-			last = {
-					status:999,
-					timestamp:Date.now(), 
-					error:info
-			} ;
+			last = {} ;
+			Object.keys(info).forEach(function(k){
+				last[k] = info[k] ;
+			});
+			
+			last.timestamp = Date.now() ;
 		}
-	}
+	} ;
+	return reporter ;
 }

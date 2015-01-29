@@ -1,16 +1,6 @@
 
 var http = require('http') ;
 
-/* If they don't exist, implement the Express like API on a ServerResponse */
-function enhanceResponse(res) {
-	res.status = res.status || function(code) { res.statusCode = code ; return res ; } ;
-	res.json = res.json || function(obj) {
-		res.setHeader("Content-Type","application/json") ;
-		res.end(JSON.stringify(obj)) ;
-	}
-	return res ;
-}
-
 module.exports = {
 	get Reporter() { return require('./reporter') },
 	get Service() { return require('./service') },
@@ -33,8 +23,6 @@ module.exports = {
 	 */
 	listen:function(port,config) {
 		var route = module.exports.Service.route(config) ;
-		http.createServer(function(req,res){
-			route(req,enhanceResponse(res)) ;
-		}).listen(port) ;
+		http.createServer(route(req,res)).listen(port) ;
 	}
 }

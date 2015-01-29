@@ -55,6 +55,16 @@ probe.ping = function(a) {
 	};
 };
 
+/* If they don't exist, implement the Express like API on a ServerResponse */
+function enhanceResponse(res) {
+	res.status = res.status || function(code) { res.statusCode = code ; return res ; } ;
+	res.json = res.json || function(obj) {
+		res.setHeader("Content-Type","application/json") ;
+		res.end(JSON.stringify(obj)) ;
+	}
+	return res ;
+}
+
 function route(config){
 	var probes = {}
 	Object.keys(config).forEach(function(k){
@@ -62,6 +72,7 @@ function route(config){
 	}) ;
 	
 	return function(req,res) {
+		res = enhanceResponse(res) ;
 		var status = {} ;
 		
 		var checks = Object.keys(probes).map(function(k){

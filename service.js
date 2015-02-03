@@ -68,7 +68,8 @@ function enhanceResponse(res) {
 function route(config){
 	var probes = {}
 	Object.keys(config).forEach(function(k){
-		probes[k] = probe[config[k].probe].call(null,config[k]);
+		if (config[k] && config[k].probe && probe[config[k].probe])
+			probes[k] = probe[config[k].probe].call(null,config[k]);
 	}) ;
 	
 	return function(req,res) {

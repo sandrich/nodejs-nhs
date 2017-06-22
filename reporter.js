@@ -1,4 +1,4 @@
-/* 
+/*
  * Trap out-going http errors and remember them so we can serve the last known error
  */
 
@@ -23,7 +23,7 @@ module.exports = function Reporter(config){
 					reporter.setLastError({
 						url:req.originalUrl,
 						status:res.statusCode,
-						response:responseBody && responseBody.map(function(x){ 
+						response:responseBody && responseBody.map(function(x){
 							return x.toString()}).join("")}) ;
 			}) ;
 			next && next() ;
@@ -32,8 +32,8 @@ module.exports = function Reporter(config){
 		lastError:function(req,res,next){
 			req.doNotMonitor = true ;
 			if (last) last.age = Date.now()-last.timestamp ;
-			if (last && last.age<config.errorTTL) 
-				res.status(400).json({status:"ERROR",lastError:last}) ;
+			if (last && last.age<config.errorTTL)
+				res.json(400,{status:"ERROR",lastError:last}) ;
 			else
 				res.json({status:"OK", lastError:last}) ;
 		},
@@ -43,7 +43,7 @@ module.exports = function Reporter(config){
 			Object.keys(info).forEach(function(k){
 				last[k] = info[k] ;
 			});
-			
+
 			last.timestamp = Date.now() ;
 		}
 	} ;
